@@ -56,7 +56,7 @@ public class PersonaController {
 	}
 	// persona con o sin el nombre del departamento dependiendo del booleano
 	@GET
-	@Path("{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Persona getPersonaWithDept(@PathParam("id") int id, @DefaultValue("false") @QueryParam("dept") Boolean withDept) {
 		Persona menda = new Persona();
@@ -85,7 +85,7 @@ public class PersonaController {
 	
 	// borrar
 	@DELETE
-	@Path("{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void deletePersona(@PathParam("id") int id) {
 		 dao.deletePersona(id);
