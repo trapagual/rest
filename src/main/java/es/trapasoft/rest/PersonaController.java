@@ -27,15 +27,7 @@ public class PersonaController {
 		listamendas = dao.getPersonas("es");
 		return listamendas;
 	}
-	@GET
-	@Path("{id: \\d+}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Persona getPersona(@PathParam("id") int id) {
-		Persona menda = new Persona();
-		menda = dao.getPersona(id);
 
-		return menda;
-	}
 	
 	@GET
 	@Path("{id: \\d+}")
