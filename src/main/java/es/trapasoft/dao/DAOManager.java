@@ -180,7 +180,7 @@ public class DAOManager {
 		Connection con = null;
 		PreparedStatement stm = null;
 		ResultSet rs=null;
-		String SQL = "SELECT p.ID, p.CITY, p.FIRSTNAME, p.LASTNAME, p.PHONENUMBER, p.STREET, p.ZIPCODE, p.DEPARTMENT_ID, d.NAME FROM person p, department d WHERE p.ID = ? AND p.DEPARTMENT_ID = d.ID";
+		String SQL = "SELECT p.ID, p.CITY, p.FIRSTNAME, p.LASTNAME, p.PHONENUMBER, p.STREET, p.ZIPCODE, p.DEPARTMENT_ID, d.NAME DEPARTMENT_NAME FROM person p, department d WHERE p.ID = ? AND p.DEPARTMENT_ID = d.ID";
 		try {
 			con = PoolConexiones.getConexion();
 			stm = con.prepareStatement(SQL);
@@ -195,6 +195,8 @@ public class DAOManager {
 				elmenda.setStreet(rs.getString("STREET"));
 				elmenda.setZipCode(rs.getString("ZIPCODE"));
 				elmenda.setDeptID(rs.getInt("DEPARTMENT_ID"));
+				elmenda.setDeptName(rs.getString("DEPARTMENT_NAME"));
+				
 			} else {
 				throw new DAOException("getPersona: No se encuentra persona con el ID:"+id);
 			}

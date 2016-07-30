@@ -10,6 +10,7 @@ public class Persona {
 	String ZipCode;
 	
 	int DeptID;
+	String DeptName;
 
 	
 	// GETTERS Y SETTERS
@@ -75,6 +76,14 @@ public class Persona {
 
 	public void setDeptID(int deptID) {
 		DeptID = deptID;
+	}
+
+	public String getDeptName() {
+		return DeptName;
+	}
+
+	public void setDeptName(String deptName) {
+		DeptName = deptName;
 	}
 	
 	
