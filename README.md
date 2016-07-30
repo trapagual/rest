@@ -10,6 +10,12 @@ El ejemplo reside en el servidor OpenShift y pueden probarse los métodos GET, d
 
 + GET de una persona, por id, recuperando también el nombre del departamento al que pertenece: http://rest-trapasoft.rhcloud.com/rest/personas/25?dept=true
 
+El sistema admite peticiones JSON y devuelve objetos JSON.
+
+Puede utilizarse con clientes REST, como el complemento Advanced Rest Client Application, para Chrome, u otros complementos de navegador o clientes de otro tipo, de los que abundan por la red.
+
+Se usará este sistema para posteriores pruebas de clientes web y android.
+
 Documentación: próximamente en http://investigando.esy.es
 
 
