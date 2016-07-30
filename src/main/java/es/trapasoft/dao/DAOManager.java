@@ -250,7 +250,7 @@ public class DAOManager {
 			pstm.setString(3, p.getLastName());
 			pstm.setString(4, p.getPhoneNumber());
 			pstm.setString(5, p.getStreet());
-			pstm.setString(6, p.getPhoneNumber());
+			pstm.setString(6, p.getZipCode());
 			pstm.setInt(7, p.getDeptID());
 			pstm.setInt(8, numSeq);
 			
@@ -289,6 +289,73 @@ public class DAOManager {
 		
 		return p;
 
+	}
+	
+	
+	public Persona updatePersona(Persona p) {
+		Connection con = null;
+		PreparedStatement pstm = null;
+		Statement s = null;
+		ResultSet rs = null;
+		                                              // 1		 2		     3			   4		5		6		       7				8
+		String SQLUpdatePerson = "UPDATE person SET CITY=?,FIRSTNAME=?,LASTNAME=?,PHONENUMBER=?,STREET=?,ZIPCODE=?,DEPARTMENT_ID=? WHERE ID=?";
+		try {
+			con = PoolConexiones.getConexion();
+			
+			// cargar el update
+			pstm = con.prepareStatement(SQLUpdatePerson);
+			pstm.setString(1, p.getCity());
+			pstm.setString(2, p.getFirstName());
+			pstm.setString(3, p.getLastName());
+			pstm.setString(4, p.getPhoneNumber());
+			pstm.setString(5, p.getStreet());
+			pstm.setString(6, p.getZipCode());
+			pstm.setInt(7, p.getDeptID());
+			pstm.setInt(8, p.getID());
+			
+			// ejecutar el update
+			
+			pstm.executeUpdate();
+			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return p;
+
+	}
+	
+	// borrar persona
+	public void deletePersona(int id) {
+		Connection con = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String SQLDeletePersona = "DELETE FROM person WHERE ID = ?";
+		try {
+			con = PoolConexiones.getConexion();
+			
+			// cargar el DELETE
+			pstm = con.prepareStatement(SQLDeletePersona);
+			pstm.setInt(1, id);
+			
+			// ejecutar delete
+			pstm.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
