@@ -30,11 +30,11 @@ public class PersonaController {
 
 	
 	@GET
-	@Path("{id: \\d+}")
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Persona getPersonaWithDept(@PathParam("id") int id, @QueryParam("dept") boolean withDept) {
+	public Persona getPersonaWithDept(@PathParam("id") int id, @QueryParam("dept") int withDept) {
 		Persona menda = new Persona();
-		if (withDept)
+		if (withDept==1)
 			menda = dao.getPersonaWithDept(id);
 		else
 			menda = dao.getPersona(id);
