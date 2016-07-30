@@ -2,6 +2,8 @@ package es.trapasoft.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -26,28 +28,32 @@ public class PersonaController {
 	// o filtradas si 'filtro' tiene un valor
 	// o por departamento si 'deptId' tiene un valor
 	@GET
+	@Path("/filtro/{filtro}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Persona> getPersonas(@DefaultValue("ninguno") @QueryParam("filtro") String filtro, 
-									 @DefaultValue("-1") @QueryParam("deptId") int deptId) {
+	public List<Persona> getPersonas(@DefaultValue(" ") @PathParam("filtro") String filtro) {
 		List<Persona> listamendas = new ArrayList<Persona>();
 
-		if (filtro != null) {
-			if ("ninguno".equals(filtro)) {
-				listamendas = dao.getPersonas(null);
-			} else {
-				listamendas = dao.getPersonas(filtro);
-			}
-			return listamendas;
-		}
-		if (deptId > 0) {
-			listamendas = dao.getPersonasByDept(deptId);
-			return listamendas;
-		}
+		listamendas = dao.getPersonas(filtro);
 		return listamendas;
-
 	}
+	@GET
+	@Path("/deptId/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Persona> getPersonas(@DefaultValue("-1") @PathParam("filtro") int id) {
+		List<Persona> listamendas = new ArrayList<Persona>();
+
+		listamendas = dao.getPersonasByDept(id);
+		return listamendas;
+	}	
 	
-	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Persona> getPersonas() {
+		List<Persona> listamendas = new ArrayList<Persona>();
+
+		listamendas = dao.getPersonas("");
+		return listamendas;
+	}
 	// persona con o sin el nombre del departamento dependiendo del booleano
 	@GET
 	@Path("{id}")
