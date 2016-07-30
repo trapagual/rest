@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -215,6 +216,79 @@ public class DAOManager {
 		}
 		
 		return elmenda;
+	}
+	
+	public Persona addPersona(Persona p) {
+		Connection con = null;
+		PreparedStatement pstm = null;
+		Statement s = null;
+		ResultSet rs = null;
+		int numSeq = -1;
+		String SQLReadSequence = "SELECT SEQ_COUNT FROM sequence WHERE SEQ_NAME = 'SEQ_GEN'";
+													// 1		2		3			4			5		6		7				8
+		String SQLInsertPerson = "INSERT INTO person (CITY, FIRSTNAME, LASTNAME, PHONENUMBER, STREET, ZIPCODE, DEPARTMENT_ID, ID) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
+		String SQLUpdateSequence = "UPDATE sequence SET SEQ_COUNT = ? WHERE SEQ_NAME = 'SEQ_GEN'";
+		try {
+			con = PoolConexiones.getConexion();
+			// empezar Transaccion
+			con.setAutoCommit(false);
+			// leer la secuencia
+			s = con.createStatement();
+			rs = s.executeQuery(SQLReadSequence);
+			while (rs.next()) {
+				numSeq = rs.getInt("SEQ_COUNT");
+			}
+			rs.close();
+			s.close();
+			// aumentar el contador
+			if (numSeq > 0) numSeq++;
+			
+			// cargar el insert
+			pstm = con.prepareStatement(SQLInsertPerson);
+			pstm.setString(1, p.getCity());
+			pstm.setString(2, p.getFirstName());
+			pstm.setString(3, p.getLastName());
+			pstm.setString(4, p.getPhoneNumber());
+			pstm.setString(5, p.getStreet());
+			pstm.setString(6, p.getPhoneNumber());
+			pstm.setInt(7, p.getDeptID());
+			pstm.setInt(8, numSeq);
+			
+			// ejecutar el insert
+			
+			pstm.executeUpdate();
+			
+			// insertar el nuevo valor de secuencia
+			
+			pstm = con.prepareStatement(SQLUpdateSequence);
+			pstm.setInt(1, numSeq);
+			pstm.executeUpdate();
+			
+			// finalizar transaccion con exito
+			con.commit();
+			
+			// cargar el valor del ID en el objeto a devolver 
+			p.setID(numSeq);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				// si error, rollback
+				con.rollback();
+				con.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return p;
+
 	}
 
 }
