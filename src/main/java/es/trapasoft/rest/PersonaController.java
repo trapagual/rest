@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -16,32 +17,36 @@ import javax.ws.rs.core.MediaType;
 import es.trapasoft.dao.DAOManager;
 import es.trapasoft.modelo.Persona;
 
-@Path("/persons")
+@Path("/personas")
 public class PersonaController {
 
 	DAOManager dao = new DAOManager();
 
 	// obtener todas las personas de la b.d.
 	// o filtradas si 'filtro' tiene un valor
+	// o por departamento si 'deptId' tiene un valor
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Persona> getPersonas(@QueryParam("filtro") String filtro) {
+	public List<Persona> getPersonas(@DefaultValue("ninguno") @QueryParam("filtro") String filtro, 
+									 @DefaultValue("-1") @QueryParam("deptId") int deptId) {
 		List<Persona> listamendas = new ArrayList<Persona>();
 
-		
-		listamendas = dao.getPersonas(filtro);
+		if (filtro != null) {
+			if ("ninguno".equals(filtro)) {
+				listamendas = dao.getPersonas(null);
+			} else {
+				listamendas = dao.getPersonas(filtro);
+			}
+			return listamendas;
+		}
+		if (deptId > 0) {
+			listamendas = dao.getPersonasByDept(deptId);
+			return listamendas;
+		}
 		return listamendas;
+
 	}
 	
-	// lista de personas por departamento
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Persona> getPersonasByDept(@QueryParam("deptId") int deptId) {
-		List<Persona> listamendas = new ArrayList<Persona>();
-		
-		listamendas = dao.getPersonasByDept(deptId);
-		return listamendas;
-	}
 	
 	// persona con o sin el nombre del departamento dependiendo del booleano
 	@GET
