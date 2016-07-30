@@ -30,7 +30,7 @@ public class PersonaController {
 	@GET
 	@Path("/filtro/{filtro}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Persona> getPersonas(@DefaultValue(" ") @PathParam("filtro") String filtro) {
+	public List<Persona> getPersonas(@DefaultValue("") @PathParam("filtro") String filtro) {
 		List<Persona> listamendas = new ArrayList<Persona>();
 
 		listamendas = dao.getPersonas(filtro);
@@ -39,7 +39,7 @@ public class PersonaController {
 	@GET
 	@Path("/deptId/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Persona> getPersonas(@DefaultValue("-1") @PathParam("filtro") int id) {
+	public List<Persona> getPersonas(@DefaultValue("-1") @PathParam("id") int id) {
 		List<Persona> listamendas = new ArrayList<Persona>();
 
 		listamendas = dao.getPersonasByDept(id);
@@ -58,7 +58,7 @@ public class PersonaController {
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Persona getPersonaWithDept(@PathParam("id") int id, @QueryParam("dept") Boolean withDept) {
+	public Persona getPersonaWithDept(@PathParam("id") int id, @DefaultValue("false") @QueryParam("dept") Boolean withDept) {
 		Persona menda = new Persona();
 		if (withDept)
 			menda = dao.getPersonaWithDept(id);
